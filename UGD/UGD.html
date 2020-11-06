@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/bulma-0.9.0/css/bulma.min.css">
+    <script src="vue.js"></script>
+    <style>
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: transparent;
+            color: black;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p>Pick a number :</p>
+        <input type="number" v-model="userInput" />
+        <p>Random Number = {{randomNumber}}</p>
+        <button @click="check()">Click Me</button>
+        <b>{{ check() }}</b>
+    </div>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Daniel Oloan Sitompul | 180709656 | PAW A</strong>
+            </p>
+        </div>
+    </footer>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            randomNumber: '',
+            userInput: '',
+            ulang: 0,
+        },
+
+        methods: {
+            generateAngka: function() {
+                this.randomNumber = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+            },
+            check() {
+                this.generateAngka()
+                if (this.userInput == this.randomNumber) {
+                    if (this.ulang < 3) {
+                        this.ulang == 0;
+                        return 'jawaban benar';
+                    } else {
+                        this.ulang == 0;
+                        return 'jawaban Benar'
+                    }
+                    return 'jawaban benar';
+                } else {
+                    if (this.ulang < 3) {
+                        this.ulang++;
+                        return 'jawaban salah';
+                    } else {
+                        this.ulang == 0;
+                        return 'jawaban masih salah';
+                    }
+                }
+            },
+        }
+    });
+</script>
+
+</html>
