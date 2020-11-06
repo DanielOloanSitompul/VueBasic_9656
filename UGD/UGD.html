@@ -5,13 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../css/bulma-0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="./css/bulma-0.9.0/css/bulma.min.css">
     <script src="vue.js"></script>
     <style>
         .footer {
             position: fixed;
-            left: 0;
-            bottom: 0;
             width: 100%;
             background-color: transparent;
             color: black;
@@ -21,54 +19,97 @@
 </head>
 
 <body>
-    <div id="app">
-        <p>Pick a number :</p>
-        <input type="number" v-model="userInput" />
-        <p>Random Number = {{randomNumber}}</p>
-        <button @click="check()">Click Me</button>
-        <b>{{ check() }}</b>
-    </div>
-    <footer class="footer">
-        <div class="content has-text-centered">
-            <p>
-                <strong>Daniel Oloan Sitompul | 180709656 | PAW A</strong>
-            </p>
+    <div id="app" class="card has-text-centered  ">
+        <div class="card-content">
+            <div class="level-item has-text-centered is-size-3  ">
+                <p>Tebak Angka dari 1-10 :
+                    <br>
+                    <input type="number" v-model="userInput" class="input is-primary" />
+                    <button @click="check()" :disabled="kunci" class="button is-primary is-rounded ">Click Me</button>
+                </p>
+
+            </div>
+            <div class="level-item has-text-centered">
+                <div v-show="benar">
+                    <p class="is-size-4">Jawaban Anda Benar !!
+                        <br>
+                        <button @click="ulangMain" type="button" class="button is-success is-small is-rounded">Main lagi?</button>
+                    </p>
+                </div>
+                <div v-show="salah">
+                    <p class="is-size-4">Tebakan Kamu Salah
+                        <br>
+                        <button @click="ulangi" type="button" class="button is-warning is-small is-rounded">Try again</button>
+                    </p>
+                </div>
+                <div v-show="defeat">
+                    <p class="is-size-4">Kesempatan coba anda sudah habis
+                        <br>Angka yang benar : {{ angka }}
+                        <br>
+                        <button @click="ulangMain" type="button" class="button is-success is-rounded is-small">Main Lagi?</button>
+                    </p>
+                </div>
+                <br>
+            </div>
         </div>
-    </footer>
+        <footer class="footer">
+            <div class="content has-text-centered">
+                <p>
+                    <strong>{{dataUser.nama }} || {{dataUser.npm}} || {{dataUser.kelas}}</strong>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+
 </body>
 <script>
     new Vue({
         el: '#app',
         data: {
-            randomNumber: '',
+            angka: Math.floor(Math.random() * (10 - 1 + 1)) + 1,
+            ulang: 3,
             userInput: '',
-            ulang: 0,
+            dataUser: {
+                nama: 'Daniel Oloan Sitompul',
+                npm: '180709656',
+                kelas: 'PAW A',
+            },
+            benar: undefined,
+            salah: undefined,
+            defeat: undefined,
         },
 
         methods: {
-            generateAngka: function() {
-                this.randomNumber = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
-            },
             check() {
-                this.generateAngka()
-                if (this.userInput == this.randomNumber) {
-                    if (this.ulang < 3) {
-                        this.ulang == 0;
-                        return 'jawaban benar';
-                    } else {
-                        this.ulang == 0;
-                        return 'jawaban Benar'
-                    }
-                    return 'jawaban benar';
+                if (this.userInput == this.angka) {
+                    this.benar = true;
+                    this.kunci = true;
                 } else {
-                    if (this.ulang < 3) {
-                        this.ulang++;
-                        return 'jawaban salah';
+                    if (this.ulang == 1) {
+                        this.defeat = true;
+                        this.kunci = true;
+                        this.ulang--;
                     } else {
-                        this.ulang == 0;
-                        return 'jawaban masih salah';
+                        this.salah = true;
+                        this.kunci = true;
+                        this.ulang--;
                     }
                 }
+            },
+
+            ulangMain() {
+                this.angka = Math.floor(Math.random() * (10 - 1 + 1)) + 1
+                this.ulang = 3;
+                this.benar = undefined;
+                this.salah = undefined;
+                this.defeat = undefined;
+                location.reload();
+            },
+
+            ulangi() {
+                this.salah = undefined;
+                this.kunci = false;
             },
         }
     });
